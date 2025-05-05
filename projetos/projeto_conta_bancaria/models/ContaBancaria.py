@@ -9,8 +9,12 @@ class ContaBancaria:
     def depositar(self, valor):
         self.saldo += valor
         self.id_historico += 1
-        self.historico.append({"valor": valor, "titular_conta": self.titular, 
-                                "tipo_transacao": "Deposito", "id_transacao": self.id_historico, "natureza": " "})
+        self.historico.append({
+            "valor": valor, 
+            "titular_conta": self.titular, 
+            "tipo_transacao": "Deposito", 
+            "id_transacao": self.id_historico, 
+            "natureza": " "})
         # Adicionar na lista de histórico
     
     def sacar(self, valor):
