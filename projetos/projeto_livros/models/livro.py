@@ -9,11 +9,17 @@ class Livro:
 
     # Função para avançar página
     def avancar_pagina(self):
-        self.pagina_atual += 1
+        if self.pagina_atual >= self.numero_paginas:
+            print("Você está na última página!")
+        else:
+            self.pagina_atual += 1
     
     # Função para voltar página
     def voltar_pagina(self):
-        self.pagina_atual -= 1
+        if self.pagina_atual > 0:
+            self.pagina_atual -= 1
+        else:
+            print("Você está na primeira página!")
     
     # Função para exibir informações
     def exibir_informacoes(self):
