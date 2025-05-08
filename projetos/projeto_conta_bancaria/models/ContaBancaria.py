@@ -18,21 +18,26 @@ class ContaBancaria:
         self.historico = [] 
         self.id_historico = 0
     
-    def depositar(self, valor):
+    def depositar(self, valor, remetente = None):
         '''
         Objetivo: Método que realiza o depósito na conta bancária.
 
-        Entrada: valor (float)
+        Entrada: valor (float) remetente (str).
 
         Return: True, se a operação foi realizada com sucesso. False, se a operação não foi realizada. 
 
         '''
+        operacao = 1
+        #Detecta se é uma transferência
+        if remetente != None:
+            operacao = 2
+
         if valor > 0:
             self.saldo += valor
             self.historico.append({
-                "operacao": 1, 
-                "remetente": self.titular, 
-                "destinatario": None, 
+                "operacao": operacao, 
+                "remetente": remetente, 
+                "destinatario": self.titular, 
                 "valor": valor, 
                 "saldo": self.saldo,
                 "dataetempo": int(time.time())
@@ -44,22 +49,26 @@ class ContaBancaria:
             return False
         # Adicionar na lista de histórico
     
-    def sacar(self, valor):
+    def sacar(self, valor, destinatario = None):
         '''
         Objetivo: Método que realiza o saque na conta bancária.
 
-        Entrada: valor (float)
+        Entrada: valor (float) destinatario (str).
 
         Return: True, se a operação foi realizada com sucesso. False, se a operação não foi realizada. 
 
         '''
+        operacao = 0
+        #Detecta se é uma transferência e altera a operação para 2
+        if destinatario != None:
+            operacao = 2
 
         if self.saldo >= valor:
             self.saldo -= valor
             self.historico.append({
-                "operacao": 0, 
+                "operacao": operacao, 
                 "remetente": self.titular, 
-                "destinatario": None, 
+                "destinatario": destinatario, 
                 "valor": valor, 
                 "saldo": self.saldo,
                 "dataetempo": int(time.time())
@@ -73,9 +82,9 @@ class ContaBancaria:
                     print("Saque Realizado!")
 
                     self.historico.append({
-                        "operacao": 0, 
+                        "operacao": operacao, 
                         "remetente": self.titular, 
-                        "destinatario": None, 
+                        "destinatario": destinatario, 
                         "valor": valor, 
                         "saldo": self.saldo,
                         "dataetempo": int(time.time())
@@ -88,29 +97,20 @@ class ContaBancaria:
         return False
         # Adicionar na lista de histórico
     
-    def transferir(self, valor, conta_destino):
-        if self.saldo > valor:
-            self.saldo -= valor
-            self.historico.append({
-                "operacao": 2, 
-                "remetente": self.titular, 
-                "destinatario": conta_destino.titular, 
-                "valor": valor, 
-                "saldo": self.saldo,
-                "dataetempo": int(time.time())
-            }) 
-            conta_destino.saldo += valor
-            conta_destino.historico.append({
-                "operacao": 2, 
-                "remetente": self.titular, 
-                "destinatario": conta_destino.titular, 
-                "valor": valor, 
-                "saldo": conta_destino.saldo,
-                "dataetempo": int(time.time())
-            })
+    def transferir(self, valor, destinatario):
+        '''
+        Objetivo: Método que realiza a transferência entre duas contas bancárias
 
-        else:
-            print("Saldo insuficiente para realizar a operação!")
+        Entrada: valor (float), obj ContaBancaria do destinario (object)
+
+        Return: Se ok -> True, Se NOK -> False. 
+
+        '''
+        # Se o saque ocorrer com sucesso
+        if self.sacar(valor, destinatario.titular):
+            # Deposita na conta do destinatário
+            destinatario.depositar(valor, self.titular)
+
 
     def exibir_historico(self):
         print(f"Histórico de transações de {self.titular}:")
