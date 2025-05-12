@@ -28,7 +28,7 @@ class ContaBancaria:
 
         '''
         operacao = 1
-        #Detecta se é uma transferência
+        # Detecta se é uma transferência
         if remetente != None:
             operacao = 2
 

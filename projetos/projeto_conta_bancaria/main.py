@@ -1,86 +1,124 @@
 from models.ContaBancaria import ContaBancaria
 
-'''conta1 = ContaBancaria('Kauê', 1300, 1200, [])
-conta2 = ContaBancaria('Jose', 2000, 1500, [])'''
-
-#- 1: criar conta;
-#- 3: sacar
-#- 4: depositar
-#- 3 realizar transferência
-#- 2: excluir conta (solicitar conta para transferir o saldo restante, ou depositar o que falta para zerar a conta)
 lista_contas = []
 
 r = "s"
 
-
-# Busca as contas na lista
-def buscar_conta(lista_contas, titular):
+# Busca as contas na lista de contas
+def buscar_conta(lista_contas):
+    # Entrada do titular que será procurado na lisa
+    titular = input("Digite o titular da conta: ")
+    # Percorre a lista de contas
     for conta in lista_contas:
         if conta.titular == titular:
-            return True
-    else:
-        return False
+            return conta # Quando a conta for encontrada retorna a conta
+    return None # Se a conta não for encontrada retorna None/Nada
 
+# Verifica se uma conta já existe dentro da lista de contas
+def verificar_duplicidade(conta_procurada, lista_contas):
+    # Percorre a lista de contas
+    for conta in lista_contas:
+        if conta.titular == conta_procurada:
+            return True # Se conta já existe retorna Verdadeiro 
+        return False # Se a conta não for encontrada retorna falso
 
 while r == "s":
-    operacao = input("Digite:\n 1 - Criar Uma Conta | \n 2 - Sacar  |\n 3 - Depositar |\n 4 - Realizar uma transferência |\n 5 - Excluir Conta | \n 6 - Exibir Saldo | \n 7 - Exibir Extrato \n")
+    operacao = input("""Digite:\n 1 - Criar Uma Conta | \n 2 - Sacar  |\n 3 - Depositar |\n 4 - Realizar uma transferência |\n 5 - Excluir Conta | \n 6 - Exibir Saldo | \n 7 - Exibir Extrato \n""")
+    
     if operacao == "1":
-        # Criar função
         print("*** CADASTRO ***")
-        print("Complete o formulário abaixo para criar a sua conta:")
-        # Criar verificação para o nome do usuário
-        titular_procurado = input("Digite o nome do titular: ")
-        saldo = input("Digite o saldo da conta: ")
-        limite = input("Digite o limite da conta: ")
-        lista_contas.append(ContaBancaria(titular_procurado, saldo, limite, []))
+        print("Complete o formulário abaixo para criar a sua conta!")
+        # Entrada para o nome do titular da conta
+        titular = input("Digite o nome do titular: ")
+        # Verifica se a conta já existe na lista
+        if verificar_duplicidade(titular, lista_contas): 
+            print("Essa conta já existe! Voltando ao menu principal...")
+            continue
+        saldo = float(input("Digite o saldo da conta: "))
+        limite = float(input("Digite o limite da conta: "))
+        # Salva as entradas do usuário na lista
+        lista_contas.append(ContaBancaria(titular, saldo, limite, []))
+   
 
     elif operacao == "2":
-        # Verificar se o titular existe
-        titular_procurado = input("Digite de qual conta será sacado o valor: ")
-        # Verificar se o valor sacado é um número (float)
-        if buscar_conta(lista_contas, titular_procurado):
-            valor_sacado = input("Digite o valor que será sacado: ")
+        print("*** SAQUE ***")
+        conta = buscar_conta(lista_contas)
+        # Se a conta estiver na lista faz a operação de saque
+        if conta:
+            valor_sacado = float(input("Digite o valor que será sacado: "))
             conta.sacar(valor_sacado)
-            print("Valor sacado")
+            print(f"Valor R${valor_sacado} sacado!")
+        else: 
+            print("Titular não encontrado!")
 
     
     elif operacao == "3":
-        titular_procurado = titular_procurado = input("Digite de qual conta será sacado o valor: ")
-        for conta in lista_contas:
-            if conta.titular == titular_procurado:
-                valor_deposito = input("Digite o valor a ser depositado: ")
-                conta.depositar(valor_deposito)
+        print("*** DEPÓSITO ***")
+        conta = buscar_conta(lista_contas)
+        # Verifica se a conta existe para realizar a operacao
+        if conta:
+            valor_deposito = float(input("Digite o valor a ser depositado: "))
+            conta.depositar(valor_deposito)
+            print(f"Valor de {valor_deposito} depositado com sucesso!")
         else:
             print("Titular não encontrado!")
     
     elif operacao == "4":
-        titular_procurado = input("Digite o titular da conta que fará a tranferência")
-        for conta in lista_contas:
-            if conta.titular == titular_procurado:
-                destinatario = input("Digite o nome do titular da conta destinataria: ")
-                for dest in lista_contas:
-                    if destinatario == dest:
-                        valor_transferido = input("Digite o valor que será transferido: ")
-                        conta.transferir(valor_transferido, dest)
-                        print("Valor Transferido")
-                else:
-                    print("Destinatario não encotrado!")
+        print("*** TRANSFERÊNCIA ***")
+        print("- REMETENTE -")
+        conta_remetente = buscar_conta(lista_contas)
+         # Verifica se a conta existe para realizar a operacao
+        if conta_remetente:
+            print("- DESTINATARIO -")
+            conta_destino = buscar_conta(lista_contas)
+             # Verifica se a conta existe para realizar a operacao
+            if conta_destino:
+                valor_transferido = float(input(f"Digite o valor que será transferido para {conta_destino.titular}: "))
+                conta_remetente.transferir(valor_transferido, conta_destino)
+                print(f"Valor R${valor_transferido} Transferido Para {conta_destino.titular}")
+            else: 
+                print("Titular não encontrado!")
+        else:
+            print("Titular não encontrado!")
 
     elif operacao == "5":
-        titular_procurado = input("Digite o titular da conta que você deseja excluir: ")
-        for conta in lista_contas:
-            if conta.titular == titular_procurado:
-                index_remove = lista_contas.index(conta)
-                del lista_contas[index_remove]
-                print("Conta removida da lista")
+        print("*** REMOVER CONTA ***")
+        print("CONTA QUE SERÁ REMOVIDA")
+        conta = buscar_conta(lista_contas)
+         # Verifica se a conta existe para realizar a operacao
+        if conta:
+            # Verifica se há saldo na conta que será exluida e transfere o saldo para outra conta
+            if conta.saldo > 0:
+                print("CONTA QUE SERÁ ENVIADA O RESTANTE DO SALDO")
+                conta_destino = buscar_conta(lista_contas)
+                if conta_destino:
+                    saldo = conta_destino.saldo
+                    conta.transferir(saldo, conta_destino)
+                else: 
+                    print("Titular da conta de destino não encontrado!")
+            # Procura o indice da conta na lista
+            index_remove = lista_contas.index(conta)
+            # Deleta a conta da lista
+            del lista_contas[index_remove]
+            print("Conta removida da lista")
+        else:
+            print("Titular não encontrado!")
 
     elif operacao == "6":
-        titular_procurado = input("Digite o titular da conta que deseja ver o saldo: ")
-        for conta in lista_contas:
-            if conta.titular == titular_procurado:
-                conta.exibir_saldo()
+        print("*** EXIBIR SALDO ***")
+        conta = buscar_conta(lista_contas)
+        if conta:
+            conta.exibir_saldo()
+        else: 
+            print("Titular não encontrado!")
+    
+    elif operacao == "7":
+        print("*** EXIBIR HISTORICO ***")
+        conta = buscar_conta(lista_contas)
+        if conta: 
+            conta.exibir_historico()
+        else:
+            print("Titular não encontrado!")
     
     r = input("Deseja continuar? [s, n]")
-
-
 
