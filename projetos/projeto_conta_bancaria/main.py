@@ -10,7 +10,7 @@ def buscar_conta(lista_contas):
     titular = input("Digite o titular da conta: ")
     # Percorre a lista de contas
     for conta in lista_contas:
-        if conta.titular == titular:
+        if conta.getTitular() == titular:
             return conta # Quando a conta for encontrada retorna a conta
     return None # Se a conta não for encontrada retorna None/Nada
 
@@ -18,12 +18,23 @@ def buscar_conta(lista_contas):
 def verificar_duplicidade(conta_procurada, lista_contas):
     # Percorre a lista de contas
     for conta in lista_contas:
-        if conta.titular == conta_procurada:
+        if conta.getTitular() == conta_procurada:
             return True # Se conta já existe retorna Verdadeiro 
         return False # Se a conta não for encontrada retorna falso
 
 while r == "s":
-    operacao = input("""Digite:\n 1 - Criar Uma Conta | \n 2 - Sacar  |\n 3 - Depositar |\n 4 - Realizar uma transferência |\n 5 - Excluir Conta | \n 6 - Exibir Saldo | \n 7 - Exibir Extrato \n""")
+    operacao = input(
+"""
+Digite:\n 
+[1] - Criar Uma Conta | 
+[2] - Sacar  |
+[3] - Depositar |
+[4] - Realizar uma transferência |
+[5] - Excluir Conta |  
+[6] - Exibir Saldo |  
+[7] - Exibir Histórico 
+[8] - Realizar PIX
+""")
     
     if operacao == "1":
         print("*** CADASTRO ***")
@@ -36,10 +47,13 @@ while r == "s":
             continue
         saldo = float(input("Digite o saldo da conta: "))
         limite = float(input("Digite o limite da conta: "))
-        # Salva as entradas do usuário na lista
-        lista_contas.append(ContaBancaria(titular, saldo, limite, []))
-   
+        chave_pix_1 = input("Cadastrar Chave Pix I: ")
+        chave_pix_2 = input("Cadastrar Chave Pix II: ")
+        chave_pix_3 = input("Cadastrar Chave Pix III: ")
 
+        # Salva as entradas do usuário na lista
+        lista_contas.append(ContaBancaria(titular, saldo, limite, [chave_pix_1, chave_pix_2, chave_pix_3], []))
+   
     elif operacao == "2":
         print("*** SAQUE ***")
         conta = buscar_conta(lista_contas)
@@ -50,7 +64,6 @@ while r == "s":
             print(f"Valor R${valor_sacado} sacado!")
         else: 
             print("Titular não encontrado!")
-
     
     elif operacao == "3":
         print("*** DEPÓSITO ***")
@@ -96,6 +109,7 @@ while r == "s":
                     conta.transferir(saldo, conta_destino)
                 else: 
                     print("Titular da conta de destino não encontrado!")
+                    continue
             # Procura o indice da conta na lista
             index_remove = lista_contas.index(conta)
             # Deleta a conta da lista
@@ -108,7 +122,7 @@ while r == "s":
         print("*** EXIBIR SALDO ***")
         conta = buscar_conta(lista_contas)
         if conta:
-            conta.exibir_saldo()
+            print(conta)
         else: 
             print("Titular não encontrado!")
     
@@ -119,6 +133,16 @@ while r == "s":
             conta.exibir_historico()
         else:
             print("Titular não encontrado!")
+    elif operacao == "8":
+        print("*** PIX ***")
+        conta = buscar_conta(conta)
+        if conta:
+            pass
+        else:
+            print("Titular não encontrado")
+        chave_pix = input("Digite a chave pix: ")
+        if chave_pix in conta.getChavesPix:
+            pass
     
     r = input("Deseja continuar? [s, n]")
 
