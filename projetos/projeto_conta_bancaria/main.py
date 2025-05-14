@@ -135,14 +135,21 @@ Digite:\n
             print("Titular não encontrado!")
     elif operacao == "8":
         print("*** PIX ***")
-        conta = buscar_conta(conta)
+        
+        conta = buscar_conta(lista_contas)
         if conta:
-            pass
+            chave_pix = input("Digite a chave pix que receberá o valor: ")
+            for conta_bancaria in lista_contas:
+                print(f"{conta_bancaria.getChavesPix()}, {conta_bancaria.getTitular()}")
+                for chave in conta_bancaria.getChavesPix():
+                    print(conta, conta_bancaria)
+                    if chave == chave_pix:
+                        valor = float(input("Digite o valor: "))
+                        if conta.realizar_pix(valor, chave_pix, conta_bancaria.getTitular()):
+                            print("Operação Realizada!")
+                        else:
+                            print("Operação Não Realizada!")
         else:
             print("Titular não encontrado")
-        chave_pix = input("Digite a chave pix: ")
-        if chave_pix in conta.getChavesPix:
-            pass
-    
     r = input("Deseja continuar? [s, n]")
 

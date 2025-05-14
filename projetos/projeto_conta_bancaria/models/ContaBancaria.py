@@ -8,7 +8,7 @@ class ContaBancaria:
     OBS: Operações no histórico: 0 - Sacar, 1 - Depositar, 2 - Transferir
     '''
 
-    def __init__(self, titular: str, saldo: float, limite: float, chaves_pix: list, historico: list) -> bool:
+    def __init__(self, titular: str, saldo: float, limite: float, chaves_pix: list, historico: list) -> None:
         '''
         Construtor da classe ContaBancaria
         '''
@@ -18,10 +18,9 @@ class ContaBancaria:
         self.__chaves_pix = chaves_pix
         self.__historico = historico
 
-        return True
     
     def __str__(self) -> str:
-        return f"Titular: {self.__titular}, Saldo: {self.__saldo}, Limite: {self.__limite}"
+        return f"Titular: {self.__titular}, Saldo: {self.__saldo}, Limite: {self.__limite}, Pix: {self.__chaves_pix}"
     
     def depositar(self, valor:float, remetente:str = None) -> bool:
         '''
@@ -43,7 +42,7 @@ class ContaBancaria:
                 "operacao": operacao, 
                 "remetente": remetente, 
                 "destinatario": self.__titular, 
-                "valor": valor, 
+                "valor": valor,
                 "saldo": self.__saldo,
                 "dataetempo": int(time.time())
             }) 
@@ -74,7 +73,7 @@ class ContaBancaria:
                 "operacao": operacao, 
                 "remetente": self.__titular, 
                 "destinatario": destinatario, 
-                "valor": valor, 
+                "valor": valor,
                 "saldo": self.__saldo,
                 "dataetempo": int(time.time())
             }) 
@@ -90,7 +89,7 @@ class ContaBancaria:
                         "operacao": operacao, 
                         "remetente": self.__titular, 
                         "destinatario": destinatario, 
-                        "valor": valor, 
+                        "valor": valor,
                         "saldo": self.__saldo,
                         "dataetempo": int(time.time())
                     }) 
@@ -139,6 +138,51 @@ class ContaBancaria:
     def getChavesPix(self) -> list:
         for chave in self.__chaves_pix:
             return chave
+        
+    def realizar_pix(self, valor, chave_pix, destinatario) -> bool:
+        operacao = 3
+        if self.__saldo >= valor:
+            self.__saldo -= valor
+            self.__historico.append({
+                "operacao": operacao, 
+                "remetente": self.__titular, 
+                "destinatario": chave_pix, 
+                "valor": valor,
+                "saldo": self.__saldo,
+                "dataetempo": int(time.time())
+            }) 
+            destinatario.depositar(valor, self.__titular)
+            return True
+        else:
+            a = input(f"Deseja utilizar o limite para o PIX? (R$ {self.__limite}) [S para sim]")
+            if a == "S":
+                if (self.__saldo + self.__limite) >= valor:
+                    self.__saldo -= valor
+                    print("pix Realizado!")
+
+                    self.__historico.append({
+                        "operacao": operacao, 
+                        "remetente": self.__titular, 
+                        "destinatario": chave_pix, 
+                        "valor": valor,
+                        "saldo": self.__saldo,
+                        "dataetempo": int(time.time())
+                    }) 
+                    destinatario.depositar(valor, self.__titular)
+                    return True 
+                else:
+                    print("Saldo e limite insuficientes para realizar a operação!")
+            else:
+                print("Operação com limite cancelada!")
+        return False
+
+
+        
+
+
+
+            
+
 
     
     
