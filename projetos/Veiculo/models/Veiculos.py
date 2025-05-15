@@ -20,9 +20,20 @@ class Veiculos:
         infos += f"Modelo: {self.__modelo}\n"
         infos += f"Ano: {self.__ano}\n"
         infos += f"Cor: {self.__cor}\n"
-        infos += f"Valor da fipe: {self.__valor_fipe}"
+        infos += f"Valor da fipe: {self.__valor_fipe}\n"
         return infos
 
     def getPlaca(self) -> str:
         """Retorna a placa do veiculo"""
         return self.__placa
+    
+    def setValorFipe(self, valor: float) -> None:
+        """
+        Método que altera o valor da Fipe do Veículo
+        
+        Args: valor (float): novo valor da fipe
+        Saída: True se ok 
+
+        """
+        self.__valor_fipe = valor
+        return True
