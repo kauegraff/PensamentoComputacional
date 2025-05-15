@@ -20,7 +20,7 @@ class CarroCombustao(Veiculos):
         """
         Retorna uma string com as informações do carro de combustão
         """
-        infos = super().__str__()
+        infos = Veiculos.__str__()
         # Adiciona as informações especificas do carro a combustão
         infos += f"Combustivel: {self.__combustivel}\n"
         infos += f"Número de portas: {self.__nPortas}\n"
