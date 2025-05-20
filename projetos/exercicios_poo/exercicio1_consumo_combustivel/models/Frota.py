@@ -1,4 +1,6 @@
-class Frota:
+from .Veiculo import Veiculo
+
+class Frota(Veiculo):
     def __init__(self, lista_veiculos: list) -> None:
         """
         Método Construtor da classe Frota
@@ -24,3 +26,22 @@ class Frota:
         """
         for frota in self.__lista_veiculos:
             print(frota)
+    
+    def calcular_consumo(self, distancia):
+        """
+              Método que cálcula o consumo de 
+              combustível da frota de veiculos
+
+        Argumentos:
+
+            distancia (float): distancia percorrida
+
+        Retorno:
+
+            calculo do consumo (float): calculo do consumo da frota
+
+        """
+        soma = 0
+        for veiculo in self.__lista_veiculos:
+            soma += veiculo.calcular_consumo(distancia)
+        return soma

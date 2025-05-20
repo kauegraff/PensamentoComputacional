@@ -25,9 +25,21 @@ class Veiculo:
     
     def calcular_consumo(self, distancia: float) -> str:
         """
-        Método que cálcula o consumo de combustível do carro
+        Método que cálcula o consumo de combustível do veículo
+
+        Argumentos:
+
+            distancia (float): distancia percorrida
+
+        Retorno:
+
+            string (str): Aguarda uma subclasse para realizar o cálculo
+
         """
         return f"Metodo somento disponivel para subclasses"
-
-
-
+    
+    def getModelo(self) -> str:
+        """
+        Método que mostra o modelo do veiculo
+        """
+        return self.__modelo

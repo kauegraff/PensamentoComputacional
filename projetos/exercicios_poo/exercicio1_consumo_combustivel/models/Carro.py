@@ -17,9 +17,18 @@ class Carro(Veiculo):
         """
         return super().__str__()
     
-    def calcular_consumo(self, distancia) -> str:
+    def calcular_consumo(self, distancia) -> float:
         """
         Método que cálcula o consumo de combustível do carro
+
+        Argumentos:
+
+            distancia (float): distancia percorrida
+
+        Retorno:
+
+            calculo do consumo (float): calculo do consumo do carro 
+
         """
         calculo_consumo = distancia /12
-        return f"O consumo do carro foi de {round(calculo_consumo, 2)} litros"
+        return calculo_consumo
