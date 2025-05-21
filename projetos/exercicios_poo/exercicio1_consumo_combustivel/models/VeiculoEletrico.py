@@ -35,3 +35,5 @@ class VeiculoEletrico(Veiculo):
         Método que carrega o carro elétrico
         """
         return "Carro carregando..."
+    
+    

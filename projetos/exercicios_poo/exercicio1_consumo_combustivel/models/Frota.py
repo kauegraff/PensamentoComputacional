@@ -1,11 +1,9 @@
-from .Veiculo import Veiculo
-
-class Frota(Veiculo):
-    def __init__(self, lista_veiculos: list) -> None:
+class Frota:
+    def __init__(self, veiculo) -> None:
         """
         Método Construtor da classe Frota
         """
-        self.__lista_veiculos = lista_veiculos
+        self.__lista_veiculos = [veiculo]
     
     def adicionar_veiculo(self, veiculo) -> bool:
         """

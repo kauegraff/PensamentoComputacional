@@ -1,3 +1,5 @@
+import re
+
 class Veiculo:
     """ 
     Classe com as pincipais funcionalidades do sistema de veículos, como placa, modelo, cor, valor da fipe
@@ -23,6 +25,10 @@ class Veiculo:
         infos += f"Valor da fipe: {self.__valor_fipe}\n"
         return infos
     
+    def validar_placa(placa:str) -> bool:
+        if len(placa) == 7:
+            return re.match(r"^[A-Z]{3}\d{4}$", placa)
+
     def calcular_consumo(self, distancia: float) -> str:
         """
         Método que cálcula o consumo de combustível do veículo
@@ -43,3 +49,28 @@ class Veiculo:
         Método que mostra o modelo do veiculo
         """
         return self.__modelo
+
+    def getPlaca(self) -> str:
+        return self.__placa
+    
+    def setPlaca(self, nova_placa) -> str:
+        if re.match(r"^[A-Z]{3}\d{4}$", nova_placa):
+            self.__placa = nova_placa
+        else:
+            print("Placa Inválida!")
+
+
+    def __eq__(self, other) -> bool:
+        """
+        Método que verifica se um atributo de um objeto é igual ao outro
+        Argumentos:
+            other (obj): o outro objeto que vai ser comparado
+        """
+        if isinstance(other, Veiculo):
+            return self.__placa == other.getPlaca()
+        else:
+            return False
+
+             
+        
+    
