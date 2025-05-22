@@ -1,4 +1,4 @@
-import re
+from utils.Erros import PlacaInvalida
 
 class Veiculo:
     """ 
@@ -25,10 +25,6 @@ class Veiculo:
         infos += f"Valor da fipe: {self.__valor_fipe}\n"
         return infos
     
-    def validar_placa(placa:str) -> bool:
-        if len(placa) == 7:
-            return re.match(r"^[A-Z]{3}\d{4}$", placa)
-
     def calcular_consumo(self, distancia: float) -> str:
         """
         Método que cálcula o consumo de combustível do veículo
@@ -54,11 +50,13 @@ class Veiculo:
         return self.__placa
     
     def setPlaca(self, nova_placa) -> str:
-        if re.match(r"^[A-Z]{3}\d{4}$", nova_placa):
-            self.__placa = nova_placa
-        else:
-            print("Placa Inválida!")
-
+        try:
+            if nova_placa[:3].isalpha() and nova_placa[3:4].isnumeric() and nova_placa[4:5].isalpha() and nova_placa[5:].isnumeric():
+                self.__placa = nova_placa
+            else:
+                raise PlacaInvalida("Placa inválida!")
+        except PlacaInvalida as erro:
+            print(f"Ocorreu um erro {erro}")
 
     def __eq__(self, other) -> bool:
         """
