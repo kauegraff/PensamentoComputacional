@@ -3,6 +3,8 @@ from models.ProdutoEletronico import ProdutoEletronico
 from models.ConversorMoeda import ConversorMoeda
 from utils.Erros import *
 
+print("---- SISTEMA DE CADASTRO DE PRODUTOS! ----\n")
+
 nome_produto = input("Digite o nome do produto: ").upper()
 preco_produto = float(input("Digite o preço do produto: "))
 moeda = input("Qual a moeda do produto [BRL, USD, EUR]?").upper()
