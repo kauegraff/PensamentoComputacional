@@ -7,3 +7,6 @@ class DistanciaExcedida(Exception):
     do que a prevista
     """
     pass
+
+class CpfInvalido(Exception):
+    pass
