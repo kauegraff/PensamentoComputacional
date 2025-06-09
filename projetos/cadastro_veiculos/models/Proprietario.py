@@ -1,45 +1,30 @@
-import re
-
 class Proprietario:
-    def __init__(self, nome: str, cpf: str) -> None:
-        """
-        Construtor da classe Proprietario
-        """
+    def __init__(self, nome, cpf, placas):
         self.__nome = nome
-        self.__cpf = cpf 
-        self.__placa = []
+        self.__cpf = cpf
+        self.__placas = list(placas)
+    
 
-    def get_nome(self) -> None:
+    #CRIAR PROPRIETARIO
+    def get_nome(self):
         return self.__nome
     
-    def get_cpf(self) -> None:
+    def get_cpf(self):
         return self.__cpf
-
-    def get_placas(self) -> None:
-        return self.__placa
     
-    def validar_cpf(self):
-        cpf = re.sub(r'[^0-9]', '', self.__cpf)
-
-        if len(cpf) != 11:
-            return False
-        elif cpf == cpf[0] * 11:
-            return False
+    def get_placas(self):
+        return self.__placas
+    
+    def adicionar_veiculo(self, placa):
+        placa = placa.upper()
+        if self.validar_placa(placa):
+            if placa not in self.__placas:
+                self.__placas.append(placa)
+                return True
+            else:
+                return False  
         else:
-            return True
-        
+            return None
 
-    def validar_placa(self, placa):
-        if re.match(r'^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$', placa):
-            return True
-        else:
-            return False
-
-    def adicionar_veiculo(self, placa: str) -> None:
-        self.__placa.append(placa)
-
-
-
-
-
-
+    def __str__(self):
+        return f"Proprietário: {self.__nome}, CPF: {self.__cpf}, Veículos: {', '.join(self.__placas) if self.__placas else 'Nenhum'}"
